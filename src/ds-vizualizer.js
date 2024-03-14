@@ -3,9 +3,10 @@ import Modal from 'react-modal';
 import './ds-visualizer.css';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
-import { useHistory } from 'react-router-dom';
-import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import LinkedList from './LinkedList';
+import { BrowserRouter } from 'react-router-dom';
 
 const DSVisualizer = () => {
   // Estado para almacenar el nombre del archivo
@@ -18,7 +19,7 @@ const DSVisualizer = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   // Para la navegacion entre tabs
-  const history = useHistory();
+  const navigate = useNavigate();
 
   // Función para abrir la ventana modal
   function handleOpenModal() {
@@ -26,7 +27,7 @@ const DSVisualizer = () => {
   }
 
   function handleTabChange(tab) {
-    history.push(tab);
+    navigate(tab);
   }
 
   // Función para cerrar la ventana modal
@@ -96,7 +97,7 @@ const DSVisualizer = () => {
     <div className="ds-visualizer">
       <div class="bar">
         <div class="bar-title">DS Visualizer</div>
-        <img src="https://leo.uniandes.edu.co/wp-content/uploads/LogoUniandes.png" alt="Logo" className='logo'/>
+        <img src="https://leo.uniandes.edu.co/wp-content/uploads/LogoUniandes.png" alt="Logo" className='logo' />
       </div>
       <h1 className="ds-visualizer-title">DS Vizualizer</h1>
       <div className="ds-visualizer">
@@ -132,17 +133,20 @@ const DSVisualizer = () => {
         {/* Muestra el nombre del archivo */}
         <p>{nameArchivo}</p>
         <div className="btn-group" >
-        <button
-          className="modal-button"
-          onClick={handleCloseModal}> Regresar </button>
-        <button
-          className="modal-button"
-          onClick={handleTabChange('/LinkedList')}> Enviar </button>
+          <button
+            className="modal-button"
+            onClick={handleCloseModal}> Regresar </button>
+          <button
+            className="modal-button"
+            onClick={handleTabChange('/LinkedList')}> Enviar </button>
         </div>
       </Modal>
-      <Switch>
-          <Route path="/LinkedList" component={LinkedList} />
-        </Switch>
+      <BrowserRouter>
+      <Routes>
+        <Route exact path="/" element={<DSVisualizer />} />
+        <Route path="/LinkedList" element={<LinkedList />} />
+      </Routes>
+    </BrowserRouter>
     </div>
   );
 
