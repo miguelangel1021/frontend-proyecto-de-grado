@@ -55,3 +55,15 @@
   flex-direction: column;
   gap: 10px;
 }
+
+.comentario {
+  background-color: #FFDFB4;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.response {
+  flex-direction: column;
+  padding: 20px;
+  margin-bottom: 20px;
+}

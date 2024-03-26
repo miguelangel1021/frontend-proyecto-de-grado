@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import Modal from 'react-modal';
 import './ds-visualizer.css';
+import imagenes from './data/LinkedList.png';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import { useNavigate } from 'react-router-dom';
-import { Routes, Route } from 'react-router-dom';
-import LinkedList from './LinkedList';
-import { BrowserRouter } from 'react-router-dom';
+
+
 
 const DSVisualizer = () => {
   // Estado para almacenar el nombre del archivo
@@ -20,7 +20,7 @@ const DSVisualizer = () => {
 
   // Para la navegacion entre tabs
   const navigate = useNavigate();
-
+  
   // Función para abrir la ventana modal
   function handleOpenModal() {
     setModalIsOpen(true);
@@ -44,6 +44,19 @@ const DSVisualizer = () => {
     setArchivo(file);
   }
 
+  function predeterminado() {
+    fetch('http://localhost:5000/config/porDefecto')
+    .then(response => response.json())
+      .then(data => {
+        // Procesa la respuesta de la API
+        handleTabChange('/LinkedList');
+      })
+      .catch(error => {
+        // Maneja el error
+        console.error(error);
+      });
+
+  }
   function handleSubmit(event) {
     // Evita el comportamiento predeterminado del formulario
     event.preventDefault();
@@ -55,9 +68,8 @@ const DSVisualizer = () => {
     form.append('file', archivo);
 
     // Envía el formulario a la API
-    fetch('/api/upload', {
-      method: 'POST',
-      body: form,
+    fetch('http://localhost:5000/config/porDefecto', {
+      method: 'POST'
     })
       .then(response => response.json())
       .then(data => {
@@ -74,7 +86,7 @@ const DSVisualizer = () => {
   function BasicExample(name, description) {
     return (
       <Card style={{ width: '18rem' }}>
-        <Card.Img variant="top" src="holder.js/100px180" />
+        <Card.Img variant="top" src={imagenes}/>
         <Card.Body className="card-body">
           <Card.Title>{name}</Card.Title>
           <Card.Text>
@@ -84,7 +96,7 @@ const DSVisualizer = () => {
             <Button variant="secondary" className="btn" onClick={handleOpenModal}>
               Cargar
             </Button>
-            <Button variant="secondary" className="btn">
+            <Button variant="secondary" className="btn" onClick={predeterminado}>
               Predeterminado
             </Button>
           </div>
@@ -99,7 +111,7 @@ const DSVisualizer = () => {
         <div class="bar-title">DS Visualizer</div>
         <img src="https://leo.uniandes.edu.co/wp-content/uploads/LogoUniandes.png" alt="Logo" className='logo' />
       </div>
-      <h1 className="ds-visualizer-title">DS Vizualizer</h1>
+      <h1 className="ds-visualizer-title">DS Visualizer</h1>
       <div className="ds-visualizer">
         <h1 className="welcome-message">
           ¡Bienvenido a nuestra herramienta para desarrolladores!
@@ -116,6 +128,7 @@ const DSVisualizer = () => {
         {BasicExample('Arboles', 'Visualiza cómo funciona un árbol')}
       </div>
       {/* Ventana modal */}
+      
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={handleCloseModal}
@@ -137,16 +150,10 @@ const DSVisualizer = () => {
             className="modal-button"
             onClick={handleCloseModal}> Regresar </button>
           <button
-            className="modal-button"
-            onClick={handleTabChange('/LinkedList')}> Enviar </button>
+            className="modal-button"> Enviar </button>
         </div>
       </Modal>
-      <BrowserRouter>
-      <Routes>
-        <Route exact path="/" element={<DSVisualizer />} />
-        <Route path="/LinkedList" element={<LinkedList />} />
-      </Routes>
-    </BrowserRouter>
+      
     </div>
   );
 
